@@ -1,0 +1,117 @@
+{
+  "name": "Hacker News AI Summarizer",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "da9b64b2-1248-4675-9378-fb8731eac694",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "all",
+        "limit": 5,
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.hackerNews",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "a065818c-2685-4c10-895a-01bd482bdb57",
+      "name": "Get many items1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        304,
+        208
+      ],
+      "id": "e3d8de8d-084d-4405-891a-ff9e6f758470",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "eXB23M6kU6DgV0aQ",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Explain this tech article title in one simple sentence for a beginner: {{ $json.title }}",
+        "messages": {
+          "messageValues": []
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        480,
+        16
+      ],
+      "id": "f86c2e51-cc88-483e-a66e-4ff6e45dc0da",
+      "name": "Basic LLM Chain"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get many items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many items1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "7d3b1b50-a507-4dbb-a694-8981fb92e935",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8b2d0d033d3dbf2c0ffe088a698dcbcb9ed92e162d400d541bb3ccfc94dc9fb6"
+  },
+  "nodeGroups": [],
+  "id": "BLruFAGsiPh0R0iq",
+  "tags": []
+}
